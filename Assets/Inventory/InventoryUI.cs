@@ -9,7 +9,7 @@ using UnityEngine.UI;
 ///  - a 3-slot hotbar at the bottom (numbers 1-3, locked slots show a padlock, equipped slot is highlighted)
 ///  - Tab opens the inventory screen: drag hotbar items between slots, click a slot to equip,
 ///    and see the Collectables section (ship parts etc. only appear here)
-///  - a crosshair while an item that wants one (the blaster) is equipped
+///  - a crosshair while an item that wants one is equipped
 ///  - short messages (picked up ...) and a "Right-click: pick up" hint when looking at an item
 /// </summary>
 public class InventoryUI : MonoBehaviour
@@ -77,7 +77,7 @@ public class InventoryUI : MonoBehaviour
         scaler.matchWidthOrHeight = 1f;
         _canvasRect = (RectTransform)cgo.transform;
 
-        // Crosshair (shown while the blaster is equipped).
+        // Crosshair (shown while an item that wants one is equipped).
         var ch = Rect("Crosshair", _canvasRect);
         ch.sizeDelta = new Vector2(40, 40);
         _crosshair = ch.gameObject;
@@ -252,8 +252,6 @@ public class InventoryUI : MonoBehaviour
             {
                 var p = hit.collider.GetComponentInParent<ItemPickup>();
                 if (p != null && p.item != null) _hint.text = "Right-click: pick up " + p.item.displayName;
-                var f = hit.collider.GetComponentInParent<ShipGearFixture>();
-                if (f != null) _hint.text = f.HintFor(inventory);
             }
         }
     }

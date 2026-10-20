@@ -225,7 +225,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_Name
-      value: Meshy_AI_Dark_ground_slab_1016165441_image-to-3d-texture
+      value: Dark_ground_slab
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -316,7 +316,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_Name
-      value: Meshy_AI_Dark_ground_slab_1016165441_image-to-3d-texture (2)
+      value: Dark_ground_slab (2)
       objectReference: {fileID: 0}
     - target: {fileID: 1151388028547126963, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -411,7 +411,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_Name
-      value: Meshy_AI_Dark_ground_slab_1016165441_image-to-3d-texture (3)
+      value: Dark_ground_slab (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -502,7 +502,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_Name
-      value: Meshy_AI_Dark_ground_slab_1016165441_image-to-3d-texture (1)
+      value: Dark_ground_slab (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -593,7 +593,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_Name
-      value: Meshy_AI_Dark_ground_slab_1016165441_image-to-3d-texture (3)
+      value: Dark_ground_slab (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -684,7 +684,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_Name
-      value: Meshy_AI_Dark_ground_slab_1016165441_image-to-3d-texture
+      value: Dark_ground_slab
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -775,7 +775,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_Name
-      value: Meshy_AI_Dark_ground_slab_1016165441_image-to-3d-texture (1)
+      value: Dark_ground_slab (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -866,7 +866,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_Name
-      value: Meshy_AI_Dark_ground_slab_1016165441_image-to-3d-texture (2)
+      value: Dark_ground_slab (2)
       objectReference: {fileID: 0}
     - target: {fileID: 1151388028547126963, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -961,7 +961,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_Name
-      value: Meshy_AI_Dark_ground_slab_1016165441_image-to-3d-texture (2)
+      value: Dark_ground_slab (2)
       objectReference: {fileID: 0}
     - target: {fileID: 1151388028547126963, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1056,7 +1056,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_Name
-      value: Meshy_AI_Dark_ground_slab_1016165441_image-to-3d-texture
+      value: Dark_ground_slab
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1147,7 +1147,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_Name
-      value: Meshy_AI_Dark_ground_slab_1016165441_image-to-3d-texture (1)
+      value: Dark_ground_slab (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1238,7 +1238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_Name
-      value: Meshy_AI_Dark_ground_slab_1016165441_image-to-3d-texture (3)
+      value: Dark_ground_slab (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1329,7 +1329,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_Name
-      value: Meshy_AI_Dark_ground_slab_1016165441_image-to-3d-texture (3)
+      value: Dark_ground_slab (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1420,7 +1420,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_Name
-      value: Meshy_AI_Dark_ground_slab_1016165441_image-to-3d-texture (1)
+      value: Dark_ground_slab (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1511,7 +1511,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_Name
-      value: Meshy_AI_Dark_ground_slab_1016165441_image-to-3d-texture (2)
+      value: Dark_ground_slab (2)
       objectReference: {fileID: 0}
     - target: {fileID: 1151388028547126963, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1606,7 +1606,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a3b7d0246df7d472da92068e455455a4, type: 3}
       propertyPath: m_Name
-      value: Meshy_AI_Dark_ground_slab_1016165441_image-to-3d-texture
+      value: Dark_ground_slab
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

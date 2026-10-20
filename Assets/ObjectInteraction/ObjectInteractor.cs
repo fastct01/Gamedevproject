@@ -21,8 +21,7 @@ public class ObjectInteractor : MonoBehaviour
     public float holdDistance = 0.14f;
     [Tooltip("How far below the centre of the view a held object sits.")]
     public float holdDrop = 0.025f;
-    [Tooltip("Dropping a mirror / power core this close to its pad (or while looking at the pad) puts it straight in.")]
-    public float placeAssistRadius = 0.25f;
+
     public float holdStiffness = 15f;
     public float throwSpeed = 14f;
 
@@ -128,14 +127,12 @@ public class ObjectInteractor : MonoBehaviour
         // Items go straight into the inventory.
         var pickup = hit.collider.GetComponentInParent<ItemPickup>();
         if (pickup != null) return pickup.Collect(gameObject);
-        var fixture = hit.collider.GetComponentInParent<ShipGearFixture>();
-        if (fixture != null) return fixture.Interact(gameObject);
         var g = hit.collider.GetComponentInParent<Grabbable>();
         if (g == null) return false;
         var rb = g.GetComponent<Rigidbody>();
         if (rb.mass > maxGrabMass) return false;
 
-        rb.SendMessage("OnInteractStart", SendMessageOptions.DontRequireReceiver); // e.g. pops it out of a socket
+        rb.SendMessage("OnInteractStart", SendMessageOptions.DontRequireReceiver);
         _held = rb;
         _heldHadGravity = rb.useGravity;
         rb.useGravity = false;
@@ -143,27 +140,8 @@ public class ObjectInteractor : MonoBehaviour
         return true;
     }
 
-    // Let go of the held object. Mirrors / the power core go straight into a matching pad if you're
-    // looking at one (or holding it right above one), instead of falling and rolling away.
-    void Drop()
-    {
-        var item = _held.GetComponent<SnapItem>();
-        if (item != null)
-        {
-            SnapSocket socket = null;
-            var cam = playerCamera.transform;
-            if (Physics.Raycast(cam.position, cam.forward, out var hit, reach, interactMask, QueryTriggerInteraction.Ignore))
-                socket = SnapSocket.FindNearestFree(item.kind, hit.point, placeAssistRadius);
-            if (socket == null) socket = SnapSocket.FindNearestFree(item.kind, _held.position, placeAssistRadius);
-            if (socket != null)
-            {
-                Release(Vector3.zero);
-                socket.TryPlace(item);
-                return;
-            }
-        }
-        Release(Vector3.zero);
-    }
+    // Let go of the held object.
+    void Drop() => Release(Vector3.zero);
 
     void Release(Vector3 velocity)
     {
@@ -178,7 +156,7 @@ public class ObjectInteractor : MonoBehaviour
         if (!Raycast(out var hit)) return;
         var p = hit.collider.GetComponentInParent<Pushable>();
         if (p == null) return;
-        p.SendMessage("OnInteractStart", SendMessageOptions.DontRequireReceiver); // e.g. pops it out of a socket
+        p.SendMessage("OnInteractStart", SendMessageOptions.DontRequireReceiver);
         _dragged = p.GetComponent<Rigidbody>();
         _dragOffset = _dragged.position - transform.position;
         _dragOffset.y = 0f;
