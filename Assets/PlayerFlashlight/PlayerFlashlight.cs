@@ -128,7 +128,7 @@ public class PlayerFlashlight : MonoBehaviour
         IsOn = startOn;
         _level = IsOn ? 1f : 0f;
         _shown = IsOn || !hideWhenOff ? 1f : 0f;
-        // Only renderers that start enabled (so a model hidden by Greybox mode stays hidden; its stand-in shows instead).
+        // Only renderers that start enabled, so a hidden renderer stays hidden.
         _modelRenderers = model != null
             ? System.Array.FindAll(model.GetComponentsInChildren<Renderer>(true), r => r.enabled)
             : new Renderer[0];

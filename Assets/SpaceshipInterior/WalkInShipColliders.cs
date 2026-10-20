@@ -51,9 +51,13 @@ public class WalkInShipColliders : MonoBehaviour
     [Tooltip("How far from the doorway (each side) the player triggers the door.")]
     public float doorTriggerDepth = 0.25f;
 
-    [Header("Visual interior (optional)")]
+    [Header("Visuals (optional)")]
+    [Tooltip("If set, the collider shell (walls, floor, ramp, corridor) is drawn with this material, so it doubles as the ship's outside.")]
+    public Material hullMaterial;
     [Tooltip("If set, the cavity gets visible inner walls with this material, so from inside you see walls instead of the outside world.")]
     public Material interiorMaterial;
+    [Tooltip("How far the inner walls sit in front of the shell. Keeps the two surfaces apart so they don't flicker.")]
+    public float liningInset = 0.002f;
 
     [Header("Setup")]
     [Tooltip("Turn off the model's own MeshCollider(s) so they stop blocking the interior.")]
@@ -84,15 +88,16 @@ public class WalkInShipColliders : MonoBehaviour
         var root = new GameObject(RootName).transform;
         root.SetParent(transform, false);
 
-        BuildShell(root, outerMin, outerMax, null);
+        BuildShell(root, outerMin, outerMax, 0f, hullMaterial, true);
 
         if (interiorMaterial != null)
         {
-            // Thin visible lining just outside the cavity, with the same doorway hole.
+            // Thin visible lining just inside the shell, with the same doorway hole. It is pulled slightly
+            // into the cavity so its faces never sit on the same plane as the shell's.
             var lining = new GameObject("Interior Lining").transform;
             lining.SetParent(root, false);
             Vector3 t = Vector3.one * 0.01f;
-            BuildShell(lining, innerMin - t, innerMax + t, interiorMaterial);
+            BuildShell(lining, innerMin - t, innerMax + t, liningInset, interiorMaterial, false);
         }
 
         if (rampWidth > 0f) BuildRamp(root);
@@ -104,9 +109,9 @@ public class WalkInShipColliders : MonoBehaviour
     {
         Vector3 a = corridorMin, b = corridorMax;
         float t = corridorWallThickness;
-        Box(parent, "Corridor Left", new Vector3(a.x - t, a.y, a.z), new Vector3(a.x, b.y, b.z), null);
-        Box(parent, "Corridor Right", new Vector3(b.x, a.y, a.z), new Vector3(b.x + t, b.y, b.z), null);
-        Box(parent, "Corridor Ceiling", new Vector3(a.x - t, b.y, a.z), new Vector3(b.x + t, b.y + t, b.z), null);
+        Box(parent, "Corridor Left", new Vector3(a.x - t, a.y, a.z), new Vector3(a.x, b.y, b.z), hullMaterial, true);
+        Box(parent, "Corridor Right", new Vector3(b.x, a.y, a.z), new Vector3(b.x + t, b.y, b.z), hullMaterial, true);
+        Box(parent, "Corridor Ceiling", new Vector3(a.x - t, b.y, a.z), new Vector3(b.x + t, b.y + t, b.z), hullMaterial, true);
     }
 
     // Two panels on the outside of the doorway that slide apart along the hull, plus a trigger zone.
@@ -180,13 +185,13 @@ public class WalkInShipColliders : MonoBehaviour
         else DestroyImmediate(o);
     }
 
-    // Floor, ceiling and four walls between the cavity and the given outer box.
-    void BuildShell(Transform parent, Vector3 oMin, Vector3 oMax, Material visual)
+    // Floor, ceiling and four walls between the cavity (shrunk by inset) and the given outer box.
+    void BuildShell(Transform parent, Vector3 oMin, Vector3 oMax, float inset, Material visual, bool solid)
     {
-        Vector3 iMin = innerMin, iMax = innerMax;
+        Vector3 iMin = innerMin + Vector3.one * inset, iMax = innerMax - Vector3.one * inset;
 
-        Box(parent, "Floor", new Vector3(oMin.x, oMin.y, oMin.z), new Vector3(oMax.x, iMin.y, oMax.z), visual);
-        Box(parent, "Ceiling", new Vector3(oMin.x, iMax.y, oMin.z), new Vector3(oMax.x, oMax.y, oMax.z), visual);
+        Box(parent, "Floor", new Vector3(oMin.x, oMin.y, oMin.z), new Vector3(oMax.x, iMin.y, oMax.z), visual, solid);
+        Box(parent, "Ceiling", new Vector3(oMin.x, iMax.y, oMin.z), new Vector3(oMax.x, oMax.y, oMax.z), visual, solid);
 
         foreach (Side s in System.Enum.GetValues(typeof(Side)))
         {
@@ -204,22 +209,23 @@ public class WalkInShipColliders : MonoBehaviour
 
             if (s != doorSide)
             {
-                Box(parent, "Wall " + s, min, max, visual);
+                Box(parent, "Wall " + s, min, max, visual, solid);
                 continue;
             }
 
+            // The inset also narrows the doorway, so the lining's door frame sits in front of the shell's.
             float c = (iMin[tan] + iMax[tan]) * 0.5f + doorOffset;
-            float d0 = c - doorWidth * 0.5f, d1 = c + doorWidth * 0.5f;
+            float d0 = c - doorWidth * 0.5f + inset, d1 = c + doorWidth * 0.5f - inset;
 
             Vector3 aMax = max; aMax[tan] = d0;
-            Box(parent, "Wall " + s + " A", min, aMax, visual);
+            Box(parent, "Wall " + s + " A", min, aMax, visual, solid);
 
             Vector3 bMin = min; bMin[tan] = d1;
-            Box(parent, "Wall " + s + " B", bMin, max, visual);
+            Box(parent, "Wall " + s + " B", bMin, max, visual, solid);
 
             Vector3 topMin = min, topMax = max;
-            topMin[tan] = d0; topMax[tan] = d1; topMin.y = iMin.y + doorHeight;
-            Box(parent, "Wall " + s + " Lintel", topMin, topMax, visual);
+            topMin[tan] = d0; topMax[tan] = d1; topMin.y = innerMin.y + doorHeight - inset;
+            Box(parent, "Wall " + s + " Lintel", topMin, topMax, visual, solid);
         }
     }
 
@@ -232,7 +238,9 @@ public class WalkInShipColliders : MonoBehaviour
         go.transform.SetParent(parent, false);
         go.transform.localRotation = rot;
         go.transform.localPosition = (rampBottom + rampTop) * 0.5f - rot * Vector3.up * (thick * 0.5f);
-        go.AddComponent<BoxCollider>().size = new Vector3(rampWidth, thick, dir.magnitude);
+        var size = new Vector3(rampWidth, thick, dir.magnitude);
+        go.AddComponent<BoxCollider>().size = size;
+        if (hullMaterial != null) AddVisual(go, size, hullMaterial);
 
         if (!addLanding) return;
         // Landing from ramp top to the doorway, flush with the cavity floor.
@@ -244,7 +252,7 @@ public class WalkInShipColliders : MonoBehaviour
             a = new Vector3(Mathf.Min(rampTop.x, doorPoint.x), innerMin.y - thick, Mathf.Min(rampTop.z, doorPoint.z) - rampWidth * 0.5f);
             b = new Vector3(Mathf.Max(rampTop.x, doorPoint.x), innerMin.y, Mathf.Max(rampTop.z, doorPoint.z) + rampWidth * 0.5f);
         }
-        Box(parent, "Landing", a, b, null);
+        Box(parent, "Landing", a, b, hullMaterial, true);
     }
 
     Vector3 DoorCentreOnOuterWall()
@@ -261,30 +269,29 @@ public class WalkInShipColliders : MonoBehaviour
         return c;
     }
 
-    static void Box(Transform parent, string name, Vector3 min, Vector3 max, Material visual)
+    // A box from min to max: a collider if solid, drawn with the material if one is given.
+    static void Box(Transform parent, string name, Vector3 min, Vector3 max, Material visual, bool solid)
     {
         Vector3 size = max - min;
         if (size.x < SlabMin || size.y < SlabMin || size.z < SlabMin) return;
+        if (!solid && visual == null) return;
 
-        GameObject go;
-        if (visual != null)
-        {
-            go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            // Lining is visual only; the collider shell handles collision.
-            if (Application.isPlaying) Destroy(go.GetComponent<Collider>());
-            else DestroyImmediate(go.GetComponent<Collider>());
-            go.GetComponent<Renderer>().sharedMaterial = visual;
-            go.transform.localScale = size;
-        }
-        else
-        {
-            go = new GameObject();
-            go.AddComponent<BoxCollider>().size = size;
-        }
-        go.name = name;
+        var go = new GameObject(name);
         go.transform.SetParent(parent, false);
         go.transform.localPosition = (min + max) * 0.5f;
-        if (visual != null) go.transform.localScale = size;
+        if (solid) go.AddComponent<BoxCollider>().size = size;
+        if (visual != null) AddVisual(go, size, visual);
+    }
+
+    static void AddVisual(GameObject go, Vector3 size, Material visual)
+    {
+        var mf = go.AddComponent<MeshFilter>();
+        mf.sharedMesh = Resources.GetBuiltinResource<Mesh>("Cube.fbx");
+        go.AddComponent<MeshRenderer>().sharedMaterial = visual;
+        // The cube mesh is 1 unit, so scale it here and shrink the collider to match.
+        go.transform.localScale = size;
+        var bc = go.GetComponent<BoxCollider>();
+        if (bc != null) bc.size = Vector3.one;
     }
 
     void OnDrawGizmosSelected()
