@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1579f08d0a5e4bacbccbb3e1bcbcb29, type: 3}
+  m_Name: Torch
+  m_EditorClassIdentifier: Assembly-CSharp::InventoryItem
+  id: torch
+  displayName: Torch
+  description: Lights the way. F switches it on/off. The monster can see you while
+    it's on.
+  collectable: 0
+  unlocksHotbarSlots: 0
+  showCrosshair: 0
+  iconStyle: 2
+  iconColor: {r: 1, g: 0.92, b: 0.6, a: 1}
