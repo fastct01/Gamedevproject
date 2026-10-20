@@ -52,6 +52,31 @@ public class SnapSocket : MonoBehaviour
         }
     }
 
+    /// <summary>The closest empty socket that takes this kind of item, within maxDistance (horizontal) of a point.</summary>
+    public static SnapSocket FindNearestFree(string kind, Vector3 point, float maxDistance)
+    {
+        SnapSocket best = null;
+        float bestD = maxDistance;
+        foreach (var s in FindObjectsByType<SnapSocket>(FindObjectsSortMode.None))
+        {
+            if (s.Current != null || s.accepts != kind) continue;
+            Vector3 d = s.transform.position - point;
+            if (Mathf.Abs(d.y) > 0.5f) continue;
+            d.y = 0f;
+            float m = d.magnitude;
+            if (m <= bestD) { bestD = m; best = s; }
+        }
+        return best;
+    }
+
+    /// <summary>Put this item into the socket right away (e.g. dropped onto it by the player).</summary>
+    public bool TryPlace(SnapItem item)
+    {
+        if (Current != null || item == null || item.kind != accepts || item.Socket != null) return false;
+        Snap(item);
+        return true;
+    }
+
     void Snap(SnapItem item)
     {
         Current = item;

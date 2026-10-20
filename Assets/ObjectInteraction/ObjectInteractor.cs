@@ -17,7 +17,12 @@ public class ObjectInteractor : MonoBehaviour
 
     [Header("Grab / Throw")]
     public float maxGrabMass = 10f;
-    public float holdDistance = 1.8f;
+    [Tooltip("How far in front of the camera a held object floats (world units; the player is 0.09 tall).")]
+    public float holdDistance = 0.14f;
+    [Tooltip("How far below the centre of the view a held object sits.")]
+    public float holdDrop = 0.025f;
+    [Tooltip("Dropping a mirror / power core this close to its pad (or while looking at the pad) puts it straight in.")]
+    public float placeAssistRadius = 0.25f;
     public float holdStiffness = 15f;
     public float throwSpeed = 14f;
 
@@ -78,7 +83,7 @@ public class ObjectInteractor : MonoBehaviour
         bool rightClick = mouse.rightButton.wasPressedThisFrame;
         if (rightClick || kb.eKey.wasPressedThisFrame)
         {
-            if (_held != null) Release(Vector3.zero);
+            if (_held != null) Drop();
             else if (!TryGrab() && rightClick) TryStartDrag();
         }
 
@@ -97,7 +102,8 @@ public class ObjectInteractor : MonoBehaviour
     {
         if (_held != null)
         {
-            Vector3 target = playerCamera.transform.position + playerCamera.transform.forward * holdDistance;
+            var camT = playerCamera.transform;
+            Vector3 target = camT.position + camT.forward * holdDistance - camT.up * holdDrop;
             Vector3 toTarget = target - _held.position;
             _held.velocity = toTarget * holdStiffness; // never drops on its own - only when you let go
             _held.angularVelocity = Vector3.zero;
@@ -135,6 +141,28 @@ public class ObjectInteractor : MonoBehaviour
         rb.useGravity = false;
         SetIgnorePlayer(rb, true);
         return true;
+    }
+
+    // Let go of the held object. Mirrors / the power core go straight into a matching pad if you're
+    // looking at one (or holding it right above one), instead of falling and rolling away.
+    void Drop()
+    {
+        var item = _held.GetComponent<SnapItem>();
+        if (item != null)
+        {
+            SnapSocket socket = null;
+            var cam = playerCamera.transform;
+            if (Physics.Raycast(cam.position, cam.forward, out var hit, reach, interactMask, QueryTriggerInteraction.Ignore))
+                socket = SnapSocket.FindNearestFree(item.kind, hit.point, placeAssistRadius);
+            if (socket == null) socket = SnapSocket.FindNearestFree(item.kind, _held.position, placeAssistRadius);
+            if (socket != null)
+            {
+                Release(Vector3.zero);
+                socket.TryPlace(item);
+                return;
+            }
+        }
+        Release(Vector3.zero);
     }
 
     void Release(Vector3 velocity)
