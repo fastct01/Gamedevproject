@@ -46,7 +46,7 @@ public class SnapSocket : MonoBehaviour
             if (Mathf.Abs(d.y) > heightTolerance) continue;
             d.y = 0f;
             if (d.magnitude > snapRadius) continue;
-            if (!rb.isKinematic && rb.linearVelocity.magnitude > 0.6f) continue;
+            if (!rb.isKinematic && rb.velocity.magnitude > 0.6f) continue;
             Snap(item);
             break;
         }
@@ -59,7 +59,7 @@ public class SnapSocket : MonoBehaviour
         var rb = item.Body;
         if (!rb.isKinematic)
         {
-            rb.linearVelocity = Vector3.zero;
+            rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
         }
         rb.isKinematic = true;

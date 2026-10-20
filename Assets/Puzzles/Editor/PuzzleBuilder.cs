@@ -92,7 +92,7 @@ public static class PuzzleBuilder
         Place(eggGo.transform, P(2.7f, 0.2f) + Vector3.up * 0.04f, 0f);
         eggGo.GetComponent<Renderer>().sharedMaterial = egg;
         var erb = eggGo.AddComponent<Rigidbody>();
-        erb.mass = 1f; erb.angularDamping = 2f; erb.linearDamping = 0.5f; erb.interpolation = RigidbodyInterpolation.Interpolate;
+        erb.mass = 1f; erb.angularDrag = 2f; erb.drag = 0.5f; erb.interpolation = RigidbodyInterpolation.Interpolate;
         eggGo.AddComponent<Grabbable>();
         eggGo.AddComponent<Pushable>();
 
@@ -153,7 +153,7 @@ public static class PuzzleBuilder
         Place(core.transform, (simple ? P(1.6f, -2.4f) : P(0.6f, -2.9f)) + Vector3.up * 0.02f, 0f);
         core.GetComponent<Renderer>().sharedMaterial = coreMat;
         var crb = core.AddComponent<Rigidbody>();
-        crb.mass = 1f; crb.angularDamping = 2f; crb.linearDamping = 0.5f; crb.interpolation = RigidbodyInterpolation.Interpolate;
+        crb.mass = 1f; crb.angularDrag = 2f; crb.drag = 0.5f; crb.interpolation = RigidbodyInterpolation.Interpolate;
         core.AddComponent<Grabbable>();
         core.AddComponent<SnapItem>().kind = "Core";
         var pc = core.AddComponent<PowerCore>();

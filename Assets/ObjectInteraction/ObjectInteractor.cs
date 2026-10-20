@@ -99,7 +99,7 @@ public class ObjectInteractor : MonoBehaviour
         {
             Vector3 target = playerCamera.transform.position + playerCamera.transform.forward * holdDistance;
             Vector3 toTarget = target - _held.position;
-            _held.linearVelocity = toTarget * holdStiffness; // never drops on its own - only when you let go
+            _held.velocity = toTarget * holdStiffness; // never drops on its own - only when you let go
             _held.angularVelocity = Vector3.zero;
         }
 
@@ -112,7 +112,7 @@ public class ObjectInteractor : MonoBehaviour
             // The grip never breaks on its own - only when you let go of the mouse button.
             Vector3 follow = _cc != null ? new Vector3(_cc.velocity.x, 0f, _cc.velocity.z) : Vector3.zero;
             Vector3 v = Vector3.ClampMagnitude(follow + toTarget * dragStiffness, DragSpeedLimit(_dragged));
-            _dragged.linearVelocity = new Vector3(v.x, _dragged.linearVelocity.y, v.z);
+            _dragged.velocity = new Vector3(v.x, _dragged.velocity.y, v.z);
         }
     }
 
@@ -141,7 +141,7 @@ public class ObjectInteractor : MonoBehaviour
     {
         _held.useGravity = _heldHadGravity;
         SetIgnorePlayer(_held, false);
-        _held.linearVelocity = velocity;
+        _held.velocity = velocity;
         _held = null;
     }
 
@@ -236,10 +236,10 @@ public class ObjectInteractor : MonoBehaviour
         Vector3 dir = new Vector3(hit.moveDirection.x, 0f, hit.moveDirection.z).normalized;
 
         // Heavier objects gain speed more slowly (impulse / mass), and nothing is pushed faster than you walk.
-        Vector3 v = rb.linearVelocity;
+        Vector3 v = rb.velocity;
         Vector3 horizontal = new Vector3(v.x, 0f, v.z) + dir * (walkPushForce * p.walkPushMultiplier / rb.mass);
         // Cap at the speed you're trying to walk (the controller's actual speed is ~0 while a box blocks it).
         horizontal = Vector3.ClampMagnitude(horizontal, IntendedSpeed());
-        rb.linearVelocity = new Vector3(horizontal.x, v.y, horizontal.z);
+        rb.velocity = new Vector3(horizontal.x, v.y, horizontal.z);
     }
 }
